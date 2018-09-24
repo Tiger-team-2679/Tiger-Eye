@@ -47,7 +47,7 @@ public class Timer {
      * function to return the timer's elapsed time
      * @return the timer elapsed time
      */
-    public double getElapseTime(){
+    public double getTime(){
         if(isFinished){
             return endTime - startTime;
         }
