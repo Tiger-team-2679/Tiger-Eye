@@ -43,7 +43,7 @@ public class Notifier implements Runnable {
      * Begins on running the notifier
      */
     public void run(){
-        notifiersLogger.debug("Notifier \"" + this.name +  "\" has started");
+        notifiersLogger.info("Notifier \"" + this.name +  "\" has started");
         // set up a new time
         while (isRunning){
             try {
@@ -76,7 +76,7 @@ public class Notifier implements Runnable {
             }
             catch (Exception e){ }
         }
-        notifiersLogger.debug("Notifier \"" + this.name +  "\" has stopped");
+        notifiersLogger.info("Notifier \"" + this.name +  "\" has stopped");
     }
 
     /**
