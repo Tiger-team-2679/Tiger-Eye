@@ -8,6 +8,12 @@ import org.team2679.TigerEye.lib.state.StateListener;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * a class  used to be run at the end of the bootstrap to track the state
+ * changes
+ *
+ * @author SlowLoris
+ */
 public class StateTracker {
 
     private static DriverStation m_ds = DriverStation.getInstance();
