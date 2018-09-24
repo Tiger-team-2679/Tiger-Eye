@@ -8,7 +8,7 @@ import org.team2679.TigerEye.lib.util.ConsoleColors;
 enum LOG_LEVEL {
     RAW,
     DEBUG(ConsoleColors.COLOR.GREEN),
-    INFO,
+    INFO(ConsoleColors.COLOR.BLUE),
     WARNING(ConsoleColors.COLOR.YELLOW),
     ERROR(ConsoleColors.COLOR.RED),
     FATAL(ConsoleColors.COLOR.PURPLE);
