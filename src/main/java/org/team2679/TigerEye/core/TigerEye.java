@@ -3,6 +3,8 @@ package org.team2679.TigerEye.core;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SampleRobot;
 import org.team2679.TigerEye.core.loader.RobotLoader;
+import org.team2679.TigerEye.core.loops.Notifier;
+import org.team2679.TigerEye.core.loops.NotifierListener;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.ConsoleColors;
 
@@ -31,6 +33,25 @@ public class TigerEye extends RobotBase  {
 
         logger.fatal("crashing!!!!!!!");
         logger.debug(ConsoleColors.colorize("hello kids, debug message here", ConsoleColors.COLOR.BLUE_BOLD_BRIGHT));
+
+        Notifier notifier = new Notifier("test", 100);
+        notifier.registerListener(new NotifierListener() {
+            @Override
+            public void onUpdate() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        notifier.start();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        notifier.stop();
     }
 
 }
