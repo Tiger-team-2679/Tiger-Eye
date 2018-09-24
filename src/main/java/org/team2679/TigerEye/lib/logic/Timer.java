@@ -51,4 +51,31 @@ public class Timer {
     public void logTimer(String name){
         // TODO implement the logger call
     }
+
+    /**
+     * returns the most accurate time the system can get in nano
+     * seconds
+     * @return time in nano seconds
+     */
+    public static double getCurrentTimeNano(){
+        return System.nanoTime();
+    }
+
+    /**
+     * Alternative to System.currentTimeMillis because we can't find
+     * the methods implementation so this is the most accurate
+     * implementation known
+     * @return time in milli seconds
+     */
+    public static double getCurrentTimeMillis(){
+        return System.nanoTime() / 1000000.0;
+    }
+
+    /**
+     * returns the nano time converted to seconds
+     * @return time in seconds
+     */
+    public static double getCurrentTimeSeconds(){
+        return System.nanoTime() / 1000000000.0;
+    }
 }
