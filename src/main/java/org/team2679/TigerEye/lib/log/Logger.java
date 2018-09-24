@@ -72,9 +72,9 @@ public class Logger {
     private String getTagString(LOG_LEVEL level){
         StringBuilder builder = new StringBuilder();
         builder.append("[" + getTime() + "] ");
-        builder.append("[" + this.getName() + "] ");
-        builder.append("[" + Thread.currentThread().getName() + "] ");
-        builder.append("[" + ConsoleColors.colorize(level.getName(), level.getColor()) + "] ");
+        builder.append("<" + this.getName() + "> ");
+        builder.append("<" + Thread.currentThread().getName() + "> ");
+        builder.append("<" + ConsoleColors.colorize(level.getName(), level.getColor()) + "> ");
 
         return builder.toString();
     }
