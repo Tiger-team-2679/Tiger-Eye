@@ -34,6 +34,16 @@ public class Timer {
     }
 
     /**
+     * this function will reset the, guess what, time!
+     */
+    public void reset(){
+        this.startTime = 0;
+        this.endTime = 0;
+        this.isFinished = false;
+        this.isStarted = false;
+    }
+
+    /**
      * function to return the timer's elapsed time
      * @return the timer elapsed time
      */
