@@ -9,6 +9,8 @@ import java.io.PrintStream;
 /**
  * A output streamer used to remove ANSI colors {@link ConsoleColors}
  * from all given inputs
+ *
+ * @author  SlowL0ris
  */
 public class ColorlessOutputStream extends PrintStream {
     OutputStream stream;

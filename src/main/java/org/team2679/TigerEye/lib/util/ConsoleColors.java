@@ -1,5 +1,10 @@
 package org.team2679.TigerEye.lib.util;
 
+/**
+ * A class used to paint string using the ANSI code
+ *
+ * @author  SlowL0ris
+ */
 public class ConsoleColors {
 
     public static String colorize(String s, COLOR color) {

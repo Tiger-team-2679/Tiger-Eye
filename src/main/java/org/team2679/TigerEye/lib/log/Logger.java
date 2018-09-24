@@ -10,6 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * a logger used to log messages from all the modules and systems
  * to be used by all the systems and modules
+ *
+ * @author  SlowL0ris
  */
 public class Logger {
 

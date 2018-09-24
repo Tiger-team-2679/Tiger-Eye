@@ -5,6 +5,8 @@ public abstract  class EyeModule {
     /**
      * returns a unique and friendly module name
      * @return a unique module name
+     *
+     * @author  SlowL0ris
      */
     public abstract String getModuleName();
 }

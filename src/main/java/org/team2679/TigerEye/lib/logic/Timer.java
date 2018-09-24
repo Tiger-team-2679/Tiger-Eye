@@ -3,6 +3,8 @@ package org.team2679.TigerEye.lib.logic;
 /**
  * A timer used to measure the time of an action
  * also has the ability to log the results and help with debugging
+ *
+ * @author  SlowL0ris
  */
 public class Timer {
 

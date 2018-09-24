@@ -7,6 +7,8 @@ import java.io.PrintStream;
  * a class used to convert the Splitstream {@link SplitStream} to a split
  * print stream, to be used for example as a replacement for the
  * System.out print stream
+ *
+ * @author  SlowL0ris
  */
 public class PrintSplitStream extends PrintStream {
 

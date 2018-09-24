@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A stream splitter used by the {@link SysOutFileWriter} in order to split the output streams
+ * A stream splitter used by the {@link SysOutFileWriter} in order to split
+ * the output streams
+ *
+ * @author  SlowL0ris
  */
 public class SplitStream extends OutputStream {
 

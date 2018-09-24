@@ -4,6 +4,8 @@ import org.team2679.TigerEye.lib.util.ConsoleColors;
 
 /**
  * Types of different logged notification levels
+ *
+ * @author  SlowL0ris
  */
 enum LOG_LEVEL {
     RAW,

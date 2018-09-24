@@ -18,7 +18,7 @@ import java.io.File;
  */
 public class TigerEye extends RobotBase  {
 
-    public static File homeDirectory = new File("/home/slowl0ris/Desktop/");
+    public static File homeDirectory = new File("/home/slowl0ris/Desktop/Tiger Eye/");
 
     @Override
     public void startCompetition() {

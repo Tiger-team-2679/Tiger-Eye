@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * Interface used to handle every message made from all the loggers
+ *
+ * @author  SlowL0ris
  */
 public interface LogHandler {
 

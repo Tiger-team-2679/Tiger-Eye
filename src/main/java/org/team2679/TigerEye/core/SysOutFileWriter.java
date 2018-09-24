@@ -11,6 +11,8 @@ import java.io.FileReader;
 
 /**
  * redirects all of the system.out calls to a file and the standard streams
+ *
+ * @author  SlowL0ris
  */
 public class SysOutFileWriter {
 
