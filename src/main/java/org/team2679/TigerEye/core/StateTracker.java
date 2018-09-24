@@ -10,7 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * a class  used to be run at the end of the bootstrap to track the state
- * changes
+ * changes {@link ROBOT_STATE} operates like the base of the SampleRobot
+ * works
  *
  * @author SlowLoris
  */
