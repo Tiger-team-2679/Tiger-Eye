@@ -36,7 +36,7 @@ public class StateTracker {
                 // or from power-on.
                 if (currentState != ROBOT_STATE.DISABLED) {
                     LiveWindow.setEnabled(false);
-                    // TODO call disabled init
+                    callListeners(ROBOT_STATE.DISABLED, currentState);
                     currentState = ROBOT_STATE.DISABLED;
                 }
 
@@ -47,7 +47,7 @@ public class StateTracker {
                 // mode or from power-on.
                 if (currentState != ROBOT_STATE.AUTONOMOUS) {
                     LiveWindow.setEnabled(false);
-                    // TODO call autonomous init
+                    callListeners(ROBOT_STATE.AUTONOMOUS, currentState);
                     currentState = ROBOT_STATE.AUTONOMOUS;
                 }
 
@@ -56,7 +56,7 @@ public class StateTracker {
             } else if (m_ds.isOperatorControl()) {
                 if (currentState != ROBOT_STATE.TELEOP) {
                     LiveWindow.setEnabled(false);
-                    // TODO call teleop init
+                    callListeners(ROBOT_STATE.TELEOP, currentState);
                     currentState = ROBOT_STATE.TELEOP;
                 }
                 HAL.observeUserProgramTeleop();
@@ -64,15 +64,24 @@ public class StateTracker {
             } else {
                 if (currentState != ROBOT_STATE.TEST) {
                     LiveWindow.setEnabled(true);
-                    // TODO call test init
+                    callListeners(ROBOT_STATE.TEST, currentState);
                     currentState = ROBOT_STATE.TEST;
                 }
                 HAL.observeUserProgramTest();
                 // TODO call test periodic
             }
-
-            // TODO call robot periodic
             LiveWindow.updateValues();
+        }
+    }
+
+    /**
+     * a private function used bu this call to call all listeners
+     * @param newState the new state the robot is entering to
+     * @param oldState the state the robot got out from
+     */
+    private static void callListeners(ROBOT_STATE newState, ROBOT_STATE oldState){
+        for (StateListener listener : listeners) {
+            listener.onStateChange(newState, oldState);
         }
     }
 
