@@ -23,7 +23,9 @@ public class StateTracker {
     private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList<>();
 
     /**
-     * initiated the robot event loops, this function
+     * this function is used to initiate the state tracker
+     * this is an an inifinite loop so make sure calling
+     * it at the end of the setup
      */
     public static void init(){
 
@@ -112,7 +114,7 @@ public class StateTracker {
      * returns the current state determined by the state tracker loop
      * @return the current state
      */
-    public ROBOT_STATE getCurrentState(){
-        return this.getCurrentState();
+    public static ROBOT_STATE getCurrentState(){
+        return currentState;
     }
 }
