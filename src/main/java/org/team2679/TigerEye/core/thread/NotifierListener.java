@@ -1,4 +1,4 @@
-package org.team2679.TigerEye.core.loops;
+package org.team2679.TigerEye.core.thread;
 
 /**
  * An object used as a runnable by the notifier
