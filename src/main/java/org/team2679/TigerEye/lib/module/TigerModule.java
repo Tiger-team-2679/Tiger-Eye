@@ -1,6 +1,6 @@
 package org.team2679.TigerEye.lib.module;
 
-public abstract  class EyeModule {
+public abstract  class TigerModule {
 
     /**
      * returns a unique and friendly module name
