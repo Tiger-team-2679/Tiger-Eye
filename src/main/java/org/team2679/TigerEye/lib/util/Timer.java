@@ -1,4 +1,4 @@
-package org.team2679.TigerEye.lib.logic;
+package org.team2679.TigerEye.lib.util;
 
 /**
  * A timer used to measure the time of an action
@@ -69,7 +69,7 @@ public class Timer {
      * seconds
      * @return time in nano seconds
      */
-    public static double getCurrentTimeNano(){
+    public static long getCurrentTimeNano(){
         return System.nanoTime();
     }
 
@@ -79,15 +79,15 @@ public class Timer {
      * implementation known
      * @return time in milli seconds
      */
-    public static double getCurrentTimeMillis(){
-        return System.nanoTime() / 1000000.0;
+    public static long getCurrentTimeMillis(){
+        return System.nanoTime() / 1000000;
     }
 
     /**
      * returns the nano time converted to seconds
      * @return time in seconds
      */
-    public static double getCurrentTimeSeconds(){
-        return System.nanoTime() / 1000000000.0;
+    public static long getCurrentTimeSeconds(){
+        return System.nanoTime() / 1000000000;
     }
 }
