@@ -119,4 +119,8 @@ public class Bootstrap {
     public static Logger getTigerLogger() {
         return tigerLogger;
     }
+
+    public static File getTigerHome() {
+        return tigerHome;
+    }
 }
