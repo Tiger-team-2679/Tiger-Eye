@@ -1,16 +1,14 @@
 package org.team2679.TigerEye.core;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.hal.HAL;
-import org.team2679.TigerEye.core.simulation.DriverStationCommunication;
+import org.team2679.TigerEye.core.thread.Notifier;
+import org.team2679.TigerEye.core.thread.NotifierListener;
 import org.team2679.TigerEye.lib.log.Logger;
-import org.team2679.TigerEye.lib.util.Timer;
-
-import java.io.File;
 
 /**
- * the boorstrap class of the robot, THis class is supposed to be called by
- * the deploy script
+ * the setup class of the robot
  *
  * @author SlowL0ris
  */
@@ -20,38 +18,53 @@ public class Tiger extends RobotBase {
         return Bootstrap.getTigerLogger();
     }
 
+    private static Notifier main_notifier_100ms;
+    private static Notifier main_notifier_50ms;
+    private static Notifier main_notifier_20ms;
+
     @Override
     public void startCompetition() {
-        Logger logger = new Logger("Tiger Eye");
+        try {
+            // TODO write the pre init code
+            HAL.observeUserProgramStarting();
+            DriverStation.getInstance().waitForData();
+            // TODO write the init code
 
+            main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
+            main_notifier_50ms = new Notifier("main_notifier_50ms", 50);
+            main_notifier_100ms = new Notifier("main_notifier_100ms", 100);
 
-        StateTracker.init();
-    }
+            main_notifier_20ms.start();
+            main_notifier_50ms.start();
+            main_notifier_100ms.start();
 
-    public static void main(String args[]){
-        SysOutFileWriter.init();
-
-        logger = new Logger("Tiger Eye");
-
-        HAL.initialize(500, 0);
-        Tiger tigerEye = new Tiger();
-        startTimeNS = Timer.getCurrentTimeNano();
-
-        // TODO find a not ugly way to load all modules and system
-
-        if(RobotBase.isSimulation()){
-            DriverStationCommunication.init();
+            StateTracker.init();
         }
-
-        // run this at the end of everything
-        RobotBase.startRobot(Tiger::new);
+        catch (Exception e){
+            // TODO inform the crash tracker
+            shutdownCrash();
+        }
     }
 
-    public static long getStartTimeNS() {
-        return startTimeNS;
+    public void shutdownSafely() {
+        log().info("Robot Shutting Down...");
+        System.exit(0);
     }
 
-    public static Logger getLogger() {
-        return logger;
+    public void shutdownCrash() {
+        log().info("Robot Error Detected... Shutting Down...");
+        System.exit(-1);
+    }
+
+    public static Notifier get_main_notifier_20ms() {
+        return main_notifier_20ms;
+    }
+
+    public static Notifier get_main_notifier_50ms() {
+        return main_notifier_50ms;
+    }
+
+    public static Notifier get_main_notifier_100ms() {
+        return main_notifier_100ms;
     }
 }

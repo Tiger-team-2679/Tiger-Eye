@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.internal.HardwareHLUsageReporting;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
+import org.team2679.TigerEye.core.simulation.DriverStationCommunication;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;
 
@@ -27,6 +28,7 @@ public class Bootstrap {
     private static long startTimeMS;
 
     public static void main(String args[]){
+        Timer.start("Bootstrap");
         startTimeNS = Timer.getCurrentTimeNano();
         startTimeMS = Timer.getCurrentTimeMillis();
 
@@ -53,6 +55,10 @@ public class Bootstrap {
         // TODO load all the modules here (pre init)
 
         // TODO initialize the robot
+        if(isSimulation){
+            DriverStationCommunication.init();
+        }
+        Timer.stop("Bootstrap");
         runRobot();
     }
 
@@ -122,5 +128,13 @@ public class Bootstrap {
 
     public static File getTigerHome() {
         return tigerHome;
+    }
+
+    public static long getStartTimeNS(){
+        return startTimeNS;
+    }
+
+    public static long getStartTimeMS() {
+        return startTimeMS;
     }
 }
