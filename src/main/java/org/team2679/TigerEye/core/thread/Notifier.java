@@ -29,6 +29,8 @@ public class Notifier implements Runnable {
     private int skipes_in_a_row = 0;
     private int skip_num;
 
+    private static ThreadGroup group = new ThreadGroup("Notifiers");
+
     /**
      * creates a notifier object with the given rate
      * @param name the name of the notifier
@@ -70,9 +72,6 @@ public class Notifier implements Runnable {
                     }
                     Thread.sleep((long) (elapse % rate));
                 }
-                if(isEmpty()){
-                    notifiersLogger.warning("Notifier \"" + this.name + "\" have no listeners , stopping notifier");
-                }
             }
             catch (Exception e){ }
         }
@@ -83,7 +82,8 @@ public class Notifier implements Runnable {
      * registers a listener in the notifier
      * @param listener
      */
-    public void registerListener(NotifierListener listener){
+    public void registerListener(NotifierListener listener)
+    {
         this.listeners.add(listener);
     }
 
@@ -91,7 +91,8 @@ public class Notifier implements Runnable {
      * removes a listener from the notifier
      * @param listener
      */
-    public void removeListener(NotifierListener listener){
+    public void removeListener(NotifierListener listener)
+    {
         this.listeners.remove(listener);
     }
 
@@ -101,8 +102,7 @@ public class Notifier implements Runnable {
     public void start(){
         if(!isRunning) {
             isRunning = true;
-            this.notifierThread = new Thread(this);
-            this.notifierThread.setName("Notifier " + this.name);
+            this.notifierThread = new Thread(group, this, this.name);
             this.notifierThread.start();
         }
     }
@@ -112,15 +112,5 @@ public class Notifier implements Runnable {
      */
     public void stop(){
         isRunning = false;
-    }
-
-    /**
-     * check if there are any listeners to run
-     */
-    public boolean isEmpty(){
-        if(listeners.size() == 0){
-            return true;
-        }
-        return false;
     }
 }
