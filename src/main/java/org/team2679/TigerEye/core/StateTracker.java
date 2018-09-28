@@ -3,6 +3,7 @@ package org.team2679.TigerEye.core;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.state.ROBOT_STATE;
 import org.team2679.TigerEye.lib.state.StateListener;
 
@@ -22,13 +23,15 @@ public class StateTracker {
     private static ROBOT_STATE currentState = ROBOT_STATE.NONE;
     private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList<>();
 
+    private static Logger stateTrackerLogger;
+
     /**
      * this function is used to initiate the state tracker
      * this is an an inifinite loop so make sure calling
      * it at the end of the setup
      */
     public static void init(){
-
+        stateTrackerLogger = new Logger("StateTracker");
         // This is where the robot is ready
         HAL.observeUserProgramStarting();
 
@@ -47,6 +50,7 @@ public class StateTracker {
                     LiveWindow.setEnabled(false);
                     callListeners(ROBOT_STATE.DISABLED, currentState);
                     currentState = ROBOT_STATE.DISABLED;
+                    stateTrackerLogger.debug("StateTracker -> switched to DISABLED");
                 }
 
                 HAL.observeUserProgramDisabled();
@@ -58,21 +62,26 @@ public class StateTracker {
                     LiveWindow.setEnabled(false);
                     callListeners(ROBOT_STATE.AUTONOMOUS, currentState);
                     currentState = ROBOT_STATE.AUTONOMOUS;
+                    stateTrackerLogger.debug("StateTracker -> switched to AUTONOMOUS");
                 }
 
                 HAL.observeUserProgramAutonomous();
                 // TODO call autonomous periodic
             } else if (m_ds.isOperatorControl()) {
                 if (currentState != ROBOT_STATE.TELEOP) {
+                    LiveWindow.setEnabled(false);
                     callListeners(ROBOT_STATE.TELEOP, currentState);
                     currentState = ROBOT_STATE.TELEOP;
+                    stateTrackerLogger.debug("StateTracker -> switched to TELEOP");
                 }
                 HAL.observeUserProgramTeleop();
                 // TODO call teleop periodic
             } else {
                 if (currentState != ROBOT_STATE.TEST) {
+                    LiveWindow.setEnabled(false);
                     callListeners(ROBOT_STATE.TEST, currentState);
                     currentState = ROBOT_STATE.TEST;
+                    stateTrackerLogger.debug("StateTracker -> switched to TEST");
                 }
                 HAL.observeUserProgramTest();
                 // TODO call test periodic
