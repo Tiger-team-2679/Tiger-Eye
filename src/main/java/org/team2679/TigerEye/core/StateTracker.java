@@ -64,7 +64,6 @@ public class StateTracker {
                 // TODO call autonomous periodic
             } else if (m_ds.isOperatorControl()) {
                 if (currentState != ROBOT_STATE.TELEOP) {
-                    LiveWindow.setEnabled(false);
                     callListeners(ROBOT_STATE.TELEOP, currentState);
                     currentState = ROBOT_STATE.TELEOP;
                 }
@@ -72,7 +71,6 @@ public class StateTracker {
                 // TODO call teleop periodic
             } else {
                 if (currentState != ROBOT_STATE.TEST) {
-                    LiveWindow.setEnabled(true);
                     callListeners(ROBOT_STATE.TEST, currentState);
                     currentState = ROBOT_STATE.TEST;
                 }
