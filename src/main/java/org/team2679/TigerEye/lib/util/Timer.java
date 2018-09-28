@@ -1,5 +1,9 @@
 package org.team2679.TigerEye.lib.util;
 
+import org.team2679.TigerEye.core.Bootstrap;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * A timer used to measure the time of an action
  * also has the ability to log the results and help with debugging
@@ -8,52 +12,36 @@ package org.team2679.TigerEye.lib.util;
  */
 public class Timer {
 
-    private boolean isFinished;
-    private boolean isStarted;
-
-    private double startTime;
-    private double endTime;
+    private static ConcurrentHashMap<String, Long> timed = new ConcurrentHashMap<>();
 
     /**
-     * starts the time
+     * creates a new timer for a task with the given name
+     * @param name the unique name of the task
+     *
      */
-    public void start(){
-        if(!isStarted) {
-            this.startTime = System.currentTimeMillis();
-            this.endTime = 0;
-            isStarted = true;
+    public static void start(String name){
+        if(!timed.containsKey(name)) {
+            timed.put(name, getCurrentTimeNano());
+        }
+        else {
+            Bootstrap.getTigerLogger().debug("Timer -> can't store two tasks with the same name");
         }
     }
 
     /**
-     * stops the timer
+     * stop the timer for the task with the given name, and logs the result
+     * @param name the unique name of the task
+     *
      */
-    public void stop(){
-        if(!isFinished) {
-            this.endTime = System.currentTimeMillis();
-            isFinished = true;
+    public static void stop(String name){
+        if(timed.containsKey(name)) {
+            Bootstrap.getTigerLogger().info(name + " finished in: " +
+                    (getCurrentTimeNano() - timed.get(name))/1000000 + "MS");
+            timed.remove(name);
         }
-    }
-
-    /**
-     * this function will reset the, guess what, time!
-     */
-    public void reset(){
-        this.startTime = 0;
-        this.endTime = 0;
-        this.isFinished = false;
-        this.isStarted = false;
-    }
-
-    /**
-     * function to return the timer's elapsed time
-     * @return the timer elapsed time
-     */
-    public double getTime(){
-        if(isFinished){
-            return endTime - startTime;
+        else {
+            Bootstrap.getTigerLogger().debug("Timer -> a task with that name doesn't exist");
         }
-        return System.currentTimeMillis() - startTime;
     }
 
     /**
