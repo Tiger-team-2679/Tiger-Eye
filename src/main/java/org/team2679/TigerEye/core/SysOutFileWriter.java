@@ -31,7 +31,7 @@ public class SysOutFileWriter {
             if (!initiated) {
                 initiated = true;
                 // get the home directory and create log directory
-                logDir = new File(TigerEye.homeDirectory, "log");
+                logDir = new File(Bootstrap.getTigerHome(), "log");
                 logDir.mkdirs();
                 // create the new log file
                 outFile = new File(logDir, "output.txt");
