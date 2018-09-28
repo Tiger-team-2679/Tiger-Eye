@@ -32,14 +32,14 @@ public class StateTracker {
         // This is where the robot is ready
         HAL.observeUserProgramStarting();
 
-        /**
-         * we chose to wait for the data from the ds rather than loop at a
-         * given delay because wa thought this will take less resources
-         */
         m_ds.waitForData();
-        //Timer.delay(delay_between_transitions);
 
         while (true) {
+            /**
+             * we chose to wait for the data from the ds rather than loop at a
+             * given delay because we thought this will take less resources
+             */
+            m_ds.waitForData();
             if (m_ds.isDisabled()) {
                 // Call DisabledInit() if we are now just entering disabled mode from either a different mode
                 // or from power-on.
