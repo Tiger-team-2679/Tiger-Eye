@@ -39,5 +39,4 @@ configurations {
 task runSimulator(type:JavaExec) {
     main = mainClassName
     classpath = sourceSets.simulation.runtimeClasspath
-    args 'hello simulator!', 'sdsd'
 }
