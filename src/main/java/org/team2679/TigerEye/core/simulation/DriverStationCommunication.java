@@ -17,10 +17,14 @@ import java.net.MulticastSocket;
 public class DriverStationCommunication {
 
     private static ThreadGroup group = new ThreadGroup("Driver Station Communication");
+    private static boolean initiated = false;
 
     public static void init() {
-        Thread runThread = new Thread(group, DriverStationCommunication::run);
-        runThread.start();
+        if(!initiated) {
+            initiated = true;
+            Thread runThread = new Thread(group, DriverStationCommunication::run, group.getName());
+            runThread.start();
+        }
     }
 
     public static void broadcast() {
@@ -114,7 +118,7 @@ public class DriverStationCommunication {
                 byte_payload[i] = (byte) payload[i];
             }
 
-            Tiger.getLogger().info("Driver Station Communication -> Broadcast Running!");
+            Tiger.log().info("Driver Station Communication -> Broadcast Running!");
             while (true) {
                 DatagramPacket packet = new DatagramPacket(byte_payload, byte_payload.length, group, 5353);
                 multicast_socket.send(packet);
@@ -124,7 +128,7 @@ public class DriverStationCommunication {
     }
 
     public static void run() {
-        Thread broadcastThread = new Thread(group, DriverStationCommunication::broadcast);
+        Thread broadcastThread = new Thread(group, DriverStationCommunication::broadcast, group.getName());
         broadcastThread.start();
         try {
             DatagramSocket socket = new DatagramSocket(1110);
@@ -138,7 +142,7 @@ public class DriverStationCommunication {
                 socket.send(sendPacket);
             }
         } catch (Exception e) {
-            Tiger.getLogger().error("Could not start Toast DriverStation Networking Service: " + e);
+            Tiger.log().error("Could not start Toast DriverStation Networking Service: " + e);
             // TODO log the exception
         }
     }
