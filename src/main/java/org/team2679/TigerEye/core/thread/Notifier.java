@@ -1,7 +1,7 @@
 package org.team2679.TigerEye.core.thread;
 
 import org.team2679.TigerEye.lib.log.Logger;
-import org.team2679.TigerEye.lib.logic.Timer;
+import org.team2679.TigerEye.lib.util.Timer;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
