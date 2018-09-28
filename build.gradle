@@ -4,12 +4,14 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'idea'
-
+apply plugin: 'application'
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
+
+mainClassName = "org.team2679.TigerEye.core.Bootstrap"
 
 dependencies {
     compile wpilib()
@@ -18,3 +20,24 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
 }
 
+sourceSets {
+    // Note that just declaring this sourceset creates two configurations.
+    simulation {
+        java {
+            srcDirs "/simulation/src/main"
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
+}
+
+configurations {
+    simulationCompile.extendsFrom testCompile
+    simulationRuntime.extendsFrom testRuntime
+}
+
+task runSimulator(type:JavaExec) {
+    main = mainClassName
+    classpath = sourceSets.simulation.runtimeClasspath
+    args 'hello simulator!', 'sdsd'
+}
