@@ -7,6 +7,9 @@
 
 package edu.wpi.first.wpilibj.hal;
 
+import org.team2679.TigerEye.core.simulation.SimulationData;
+import org.team2679.TigerEye.lib.state.ROBOT_STATE;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -14,7 +17,16 @@ import java.nio.ByteBuffer;
  */
 @SuppressWarnings({"AbbreviationAsWordInName", "MethodName", "PMD.TooManyMethods"})
 public final class HAL extends JNIWrapper {
-    public static native void waitForDSData();
+    public static void waitForDSData(){
+        while (!SimulationData.is_new_data_available){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        SimulationData.is_new_data_available = false;
+    }
 
     public static boolean initialize(int timeout, int mode) { return false; };
 
@@ -60,14 +72,14 @@ public final class HAL extends JNIWrapper {
 
     @SuppressWarnings("JavadocMethod")
     public static void getControlWord(ControlWord controlWord) {
-        int word = nativeGetControlWord();
-        controlWord.update((word & 1) != 0, ((word >> 1) & 1) != 0, ((word >> 2) & 1) != 0,
-                ((word >> 3) & 1) != 0, ((word >> 4) & 1) != 0, ((word >> 5) & 1) != 0);
+        // TODO simulate the parts about the emergency stop, the fms, and ds attached
+        ROBOT_STATE s = SimulationData.currentState;
+        controlWord.update(s != ROBOT_STATE.DISABLED, s == ROBOT_STATE.AUTONOMOUS, s == ROBOT_STATE.TEST,
+                false, false, true);
     }
 
     private static int nativeGetAllianceStation(){
-        // TODO implement the simulation data
-        return 0;
+        return SimulationData.alliance_station;
     };
 
     @SuppressWarnings("JavadocMethod")
