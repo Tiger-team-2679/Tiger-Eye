@@ -1,5 +1,5 @@
 plugins {
-    id "edu.wpi.first.GradleRIO" version "2018.06.21"
+    id "edu.wpi.first.GradleRIO" version "2019.0.0-alpha-3"
     id "java"
     id "idea"
     id "application"
@@ -13,8 +13,44 @@ repositories {
 
 mainClassName = "org.team2679.TigerEye.core.Bootstrap"
 
+deploy {
+    targets {
+        target('robot') {
+            directory = '/home/lvuser'  // The root directory to start deploying to. Default: user home
+            maxChannels = 4         // The number of channels to open on the target (how many files / commands to run at the same time). Default: 1
+            timeout = 3             // Timeout to use when connecting to target. Default: 3 (seconds)
+            failOnMissing = true    // Should the build fail if the target can't be found? Default: true
+
+            locations {
+                ssh {
+                    address = "roborio-2679-FRC.local"  // Required. The address to try
+                    user = 'admin'             // Required. The user to login as
+                    password = ''               // The password for the user. Default: blank (empty) string
+                    ipv6 = false                // Are IPv6 addresses permitted? Default: false
+                }
+            }
+        }
+    }
+    artifacts {
+        // Setup a Java Artifact. Required for Java Users.
+        all {
+            targets << 'robot'
+
+            javaArtifact('myJavaArtifact') {
+                jar = 'jar'                         // The jar (or Jar task) to deploy. Default: 'jar'
+                // Note: This artifact will automatically depend on the jar build task
+                postdeploy << { execute ". /etc/profile.d/natinst-path.sh; /usr/local/frc/bin/frcKillRobot.sh -t -r 2> /dev/null"
+                execute "head tiger"}
+            }
+            // Other values can be edited through EmbeddedTools.
+            // See https://github.com/JacisNonsense/EmbeddedTools#spec
+        }
+    }
+}
+
 dependencies {
     compile wpilib()
+    compile ctre()
 
     compile group: 'io.github.classgraph', name: 'classgraph', version: '4.1.7'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
@@ -39,4 +75,14 @@ configurations {
 task runSimulator(type:JavaExec) {
     main = mainClassName
     classpath = sourceSets.simulation.runtimeClasspath
+}
+
+def robotManifest = {
+    //attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Main-Class': 'org.team2679.TigerEye.core.Bootstrap'
+}
+
+jar.doFirst {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
 }

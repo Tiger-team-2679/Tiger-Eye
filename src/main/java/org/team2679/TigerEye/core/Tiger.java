@@ -1,5 +1,7 @@
 package org.team2679.TigerEye.core;
 
+import com.ctre.phoenix.CTREJNIWrapper;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.hal.HAL;

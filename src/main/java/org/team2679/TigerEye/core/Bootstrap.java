@@ -1,8 +1,13 @@
 package org.team2679.TigerEye.core;
 
+import edu.wpi.cscore.CameraServerJNI;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.HLUsageReporting;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.hal.FRCNetComm;
+import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.internal.HardwareHLUsageReporting;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
@@ -35,7 +40,7 @@ public class Bootstrap {
         // TODO check if the loading time is normal
 
         //TODO get environment arguments to check if simulation
-        isSimulation = true;
+        isSimulation = false;
 
         if(isSimulation){
             tigerHome = new File("tiger/").getAbsoluteFile();
@@ -59,20 +64,22 @@ public class Bootstrap {
             DriverStationCommunication.init();
         }
         Timer.stop("Bootstrap");
+
         runRobot();
     }
 
     private static void runRobot(){
+        RobotBase.initializeHardwareConfiguration();
+        HAL.report(FRCNetComm.tResourceType.kResourceType_Language, FRCNetComm.tInstances.kLanguage_Java);
+
         Tiger tiger = new Tiger();
 
         edu.wpi.first.wpilibj.Timer.SetImplementation(new HardwareTimer());
         HLUsageReporting.SetImplementation(new HardwareHLUsageReporting());
         RobotState.SetImplementation(DriverStation.getInstance());
 
-        // TODO deal with the cscore lib
-        //CameraServerJNI.enumerateSinks();
-
         if(!isSimulation) {
+            CameraServerJNI.enumerateSinks();
             try {
                 final File file = new File("/tmp/frc_versions/FRC_Lib_Version.ini");
 
@@ -92,7 +99,6 @@ public class Bootstrap {
                         ex.getStackTrace());
             }
         }
-
         tiger.startCompetition();
     }
 
