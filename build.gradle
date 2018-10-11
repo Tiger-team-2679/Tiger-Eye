@@ -56,11 +56,6 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
 }
 
-configurations {
-    simulationCompile.extendsFrom testCompile
-    simulationRuntime.extendsFrom testRuntime
-}
-
 def robotManifest = {
     //attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
     attributes 'Main-Class': 'org.team2679.TigerEye.core.Bootstrap'
