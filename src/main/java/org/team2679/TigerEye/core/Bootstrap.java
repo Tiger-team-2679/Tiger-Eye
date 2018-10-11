@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.hal.FRCNetComm;
 import edu.wpi.first.wpilibj.hal.HAL;
+import edu.wpi.first.wpilibj.hal.HALUtil;
 import edu.wpi.first.wpilibj.internal.HardwareHLUsageReporting;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
@@ -40,7 +41,7 @@ public class Bootstrap {
         // TODO check if the loading time is normal
 
         //TODO get environment arguments to check if simulation
-        isSimulation = false;
+        isSimulation = HALUtil.getHALRuntimeType() != 0;
 
         if(isSimulation){
             tigerHome = new File("tiger/").getAbsoluteFile();
