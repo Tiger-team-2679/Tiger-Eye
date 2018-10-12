@@ -29,7 +29,6 @@ public class Tiger extends RobotBase {
         try {
             // TODO write the pre init code
             HAL.observeUserProgramStarting();
-            DriverStation.getInstance().waitForData();
             // TODO write the init code
 
             main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
