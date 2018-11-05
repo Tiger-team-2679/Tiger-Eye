@@ -1,12 +1,10 @@
 package org.team2679.TigerEye.core;
 
-import com.ctre.phoenix.CTREJNIWrapper;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.hal.HAL;
+import org.team2679.TigerEye.core.loaders.Initiater;
+import org.team2679.TigerEye.core.loaders.MethodLoader;
 import org.team2679.TigerEye.core.thread.Notifier;
-import org.team2679.TigerEye.core.thread.NotifierListener;
 import org.team2679.TigerEye.lib.log.Logger;
 
 /**
@@ -29,7 +27,8 @@ public class Tiger extends RobotBase {
         try {
             // TODO write the pre init code
             HAL.observeUserProgramStarting();
-            // TODO write the init code
+
+            MethodLoader.loadByAnnotation(Initiater.class); // loading the main method
 
             main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
             main_notifier_50ms = new Notifier("main_notifier_50ms", 50);
