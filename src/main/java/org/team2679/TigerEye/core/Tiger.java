@@ -1,7 +1,7 @@
 package org.team2679.TigerEye.core;
 
-import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.hal.HAL;
 import org.team2679.TigerEye.core.thread.Notifier;
 import org.team2679.TigerEye.lib.log.Logger;
 

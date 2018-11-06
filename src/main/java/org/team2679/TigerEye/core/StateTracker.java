@@ -1,7 +1,7 @@
 package org.team2679.TigerEye.core;
 
-import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.state.ROBOT_STATE;

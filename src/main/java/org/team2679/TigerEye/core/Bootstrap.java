@@ -1,10 +1,15 @@
 package org.team2679.TigerEye.core;
 
 import edu.wpi.cscore.CameraServerJNI;
-import edu.wpi.first.hal.FRCNetComm;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.HLUsageReporting;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.hal.FRCNetComm;
+import edu.wpi.first.wpilibj.hal.HAL;
+import edu.wpi.first.wpilibj.hal.HALUtil;
+import edu.wpi.first.wpilibj.internal.HardwareHLUsageReporting;
+import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;
@@ -57,38 +62,17 @@ public class Bootstrap {
     }
 
     private static void runRobot(){
-        if (!HAL.initialize(500, 0)) {
-            throw new IllegalStateException("Failed to initialize. Terminating");
-        }
-// Call a CameraServer JNI function to force OpenCV native library loading
-        // Needed because all the OpenCV JNI functions don't have built in loading
-        if(!isSimulation) {
-            CameraServerJNI.enumerateSinks();
-        }
+        RobotBase.initializeHardwareConfiguration();
         HAL.report(FRCNetComm.tResourceType.kResourceType_Language, FRCNetComm.tInstances.kLanguage_Java);
 
-        Tiger robot;
-        try {
-            robot = new Tiger();
-        } catch (Throwable throwable) {
-            Throwable cause = throwable.getCause();
-            if (cause != null) {
-                throwable = cause;
-            }
-            String robotName = "Unknown";
-            StackTraceElement[] elements = throwable.getStackTrace();
-            if (elements.length > 0) {
-                robotName = elements[0].getClassName();
-            }
-            DriverStation.reportError("Unhandled exception instantiating robot " + robotName + " "
-                    + throwable.toString(), elements);
-            DriverStation.reportWarning("Robots should not quit, but yours did!", false);
-            DriverStation.reportError("Could not instantiate robot " + robotName + "!", false);
-            System.exit(1);
-            return;
-        }
+        Tiger tiger = new Tiger();
+
+        edu.wpi.first.wpilibj.Timer.SetImplementation(new HardwareTimer());
+        HLUsageReporting.SetImplementation(new HardwareHLUsageReporting());
+        RobotState.SetImplementation(DriverStation.getInstance());
 
         if(!isSimulation) {
+            CameraServerJNI.enumerateSinks();
             try {
                 final File file = new File("/tmp/frc_versions/FRC_Lib_Version.ini");
 
@@ -108,30 +92,7 @@ public class Bootstrap {
                         ex.getStackTrace());
             }
         }
-
-        boolean errorOnExit = false;
-        try {
-            robot.startCompetition();
-        } catch (Throwable throwable) {
-            Throwable cause = throwable.getCause();
-            if (cause != null) {
-                throwable = cause;
-            }
-            DriverStation.reportError("Unhandled exception: " + throwable.toString(),
-                    throwable.getStackTrace());
-            errorOnExit = true;
-        } finally {
-            // startCompetition never returns unless exception occurs....
-            DriverStation.reportWarning("Robots should not quit, but yours did!", false);
-            if (errorOnExit) {
-                DriverStation.reportError(
-                        "The startCompetition() method (or methods called by it) should have "
-                                + "handled the exception above.", false);
-            } else {
-                DriverStation.reportError("Unexpected return from startCompetition() method.", false);
-            }
-        }
-        System.exit(1);
+        tiger.startCompetition();
     }
 
     private static String getSplash(){
