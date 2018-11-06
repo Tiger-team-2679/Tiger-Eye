@@ -14,3 +14,13 @@ dependencies {
     compile group: 'io.github.classgraph', name: 'classgraph', version: '4.1.7'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
 }
+
+def robotManifest = {
+    //attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Main-Class': 'org.team2679.TigerEye.core.Bootstrap'
+}
+
+jar.doFirst {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}

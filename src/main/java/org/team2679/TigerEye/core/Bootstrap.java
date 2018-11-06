@@ -6,7 +6,6 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
-import org.team2679.TigerEye.core.simulation.DriverStationCommunication;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;
 
@@ -52,12 +51,6 @@ public class Bootstrap {
         System.out.println("Tiger Loaded On OS: " + getOS());
         System.out.println("Hardware Provider: " + getHardwareProvider());
 
-        // TODO load all the modules here (pre init)
-
-        // TODO initialize the robot
-        if(isSimulation){
-            DriverStationCommunication.init();
-        }
         Timer.stop("Bootstrap");
 
         runRobot();

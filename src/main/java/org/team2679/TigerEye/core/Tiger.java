@@ -2,8 +2,6 @@ package org.team2679.TigerEye.core;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.RobotBase;
-import org.team2679.TigerEye.core.loaders.Initiater;
-import org.team2679.TigerEye.core.loaders.MethodLoader;
 import org.team2679.TigerEye.core.thread.Notifier;
 import org.team2679.TigerEye.lib.log.Logger;
 
@@ -25,10 +23,28 @@ public class Tiger extends RobotBase {
     @Override
     public void startCompetition() {
         try {
-            // TODO write the pre init code
+            Setup setup = null;
+            try {
+                Class cls = java.lang.ClassLoader.getSystemClassLoader().loadClass(TigerEyeProperties.MAIN_CLASS);
+                Object object = cls.newInstance();
+                if(object instanceof Setup){
+                    setup = (Setup) object;
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                throw new Exception("No setup class was found");
+            }
+
+            if(setup != null) {
+                setup.preinit();
+            }
+
             HAL.observeUserProgramStarting();
 
-            MethodLoader.loadByAnnotation(Initiater.class); // loading the main method
+            if(setup != null){
+                setup.init();
+            }
 
             main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
             main_notifier_50ms = new Notifier("main_notifier_50ms", 50);
@@ -42,6 +58,7 @@ public class Tiger extends RobotBase {
         }
         catch (Exception e){
             // TODO inform the crash tracker
+            e.printStackTrace();
             shutdownCrash();
         }
     }

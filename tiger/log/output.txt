@@ -22,5 +22,5 @@ _'    `\   _/=== \___/
 
 Tiger Loaded On OS: Windows 10
 Hardware Provider: Simulation
-[05/11/18-12:52:39] [Tiger] [main] [INFO] Bootstrap finished in: 168MS
-[05/11/18-12:52:39] [Tiger] [Driver Station Communication] [INFO] Driver Station Communication -> Broadcast Running!
+[06/11/18-10:57:15] [Tiger] [main] [INFO] Bootstrap finished in: 58MS
+[06/11/18-10:57:15] [Tiger] [main] [INFO] Robot Error Detected... Shutting Down...
