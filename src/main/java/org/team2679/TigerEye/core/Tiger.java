@@ -42,10 +42,6 @@ public class Tiger extends RobotBase {
 
             HAL.observeUserProgramStarting();
 
-            if(setup != null){
-                setup.init();
-            }
-
             main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
             main_notifier_50ms = new Notifier("main_notifier_50ms", 50);
             main_notifier_100ms = new Notifier("main_notifier_100ms", 100);
@@ -53,6 +49,10 @@ public class Tiger extends RobotBase {
             main_notifier_20ms.start();
             main_notifier_50ms.start();
             main_notifier_100ms.start();
+
+            if(setup != null){
+                setup.init();
+            }
 
             StateTracker.init();
         }
