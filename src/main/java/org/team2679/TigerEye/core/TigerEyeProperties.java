@@ -27,5 +27,5 @@ public class TigerEyeProperties {
         return prop.getProperty(key);
     }
 
-    public static final String MAIN_CLASS = getProperty("main_class");
+    public static final String MAIN_CLASS = getProperty("setup_class");
 }
