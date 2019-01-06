@@ -1,18 +1,17 @@
 plugins {
-    id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-1"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1-rc-1"
     id "java"
 }
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile wpilib()
-    compile group: 'io.github.classgraph', name: 'classgraph', version: '4.1.7'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
+    compile wpi.deps.wpilib()
+    compile wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 }
 
 def robotManifest = {
@@ -23,4 +22,8 @@ def robotManifest = {
 jar.doFirst {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     manifest robotManifest
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.0'
 }
