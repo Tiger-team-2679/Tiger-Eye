@@ -1,5 +1,5 @@
 plugins {
-    id "edu.wpi.first.GradleRIO" version "2019.1.1-rc-1"
+    id "edu.wpi.first.GradleRIO"
     id "java"
 }
 
@@ -12,18 +12,4 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-}
-
-def robotManifest = {
-    //attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
-    attributes 'Main-Class': 'org.team2679.TigerEye.core.Bootstrap'
-}
-
-jar.doFirst {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest robotManifest
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '5.0'
 }

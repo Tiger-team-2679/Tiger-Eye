@@ -5,13 +5,16 @@ import edu.wpi.first.hal.FRCNetComm;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.function.Supplier;
 
 public class Bootstrap {
 
@@ -27,68 +30,55 @@ public class Bootstrap {
     private static long startTimeMS;
 
     public static void main(String args[]){
-        Timer.start("Bootstrap");
-        startTimeNS = Timer.getCurrentTimeNano();
-        startTimeMS = Timer.getCurrentTimeMillis();
+        try {
+            Timer.start("Bootstrap");
+            startTimeNS = Timer.getCurrentTimeNano();
+            startTimeMS = Timer.getCurrentTimeMillis();
 
-        // TODO check if the loading time is normal
+            isSimulation = !RobotBase.isReal();
 
-        //TODO get environment arguments to check if simulation
-        isSimulation = HALUtil.getHALRuntimeType() != 0;
+            if (isSimulation) {
+                tigerHome = new File("tiger/").getAbsoluteFile();
+                // do the stuff we need in the simulation
+            }
+            tigerHome.mkdirs();
 
-        if(isSimulation){
-            tigerHome = new File("tiger/").getAbsoluteFile();
-            // do the stuff we need in the simulation
+            SysOutFileWriter.init();
+
+            tigerLogger = new Logger("Tiger");
+
+            System.out.println(getSplash());
+            System.out.println("Tiger Loaded On OS: " + getOS());
+            System.out.println("Hardware Provider: " + getHardwareProvider());
+
+            Timer.stop("Bootstrap");
+
+            runRobot(Tiger::new);
         }
-        tigerHome.mkdirs();
-
-        // loading the logger utilities and crash handler
-        // TODO complete implementation
-        SysOutFileWriter.init();
-        tigerLogger = new Logger("Tiger");
-
-        System.out.println(getSplash());
-        System.out.println("Tiger Loaded On OS: " + getOS());
-        System.out.println("Hardware Provider: " + getHardwareProvider());
-
-        Timer.stop("Bootstrap");
-
-        runRobot();
+        catch(Exception e) {
+            System.err.println("Error in bootstrap, Something went really really wrong.");
+        }
     }
 
-    private static void runRobot(){
+    /**
+     * Starting point for the robot.
+     */
+    @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.AvoidCatchingThrowable",
+            "PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
+    private static <T extends RobotBase> void runRobot(Supplier<T> robotSupplier) {
         if (!HAL.initialize(500, 0)) {
             throw new IllegalStateException("Failed to initialize. Terminating");
         }
-// Call a CameraServer JNI function to force OpenCV native library loading
+
+        // Call a CameraServer JNI function to force OpenCV native library loading
         // Needed because all the OpenCV JNI functions don't have built in loading
-        if(!isSimulation) {
-            CameraServerJNI.enumerateSinks();
-        }
+        CameraServerJNI.enumerateSinks();
+
         HAL.report(FRCNetComm.tResourceType.kResourceType_Language, FRCNetComm.tInstances.kLanguage_Java);
 
-        Tiger robot;
-        try {
-            robot = new Tiger();
-        } catch (Throwable throwable) {
-            Throwable cause = throwable.getCause();
-            if (cause != null) {
-                throwable = cause;
-            }
-            String robotName = "Unknown";
-            StackTraceElement[] elements = throwable.getStackTrace();
-            if (elements.length > 0) {
-                robotName = elements[0].getClassName();
-            }
-            DriverStation.reportError("Unhandled exception instantiating robot " + robotName + " "
-                    + throwable.toString(), elements);
-            DriverStation.reportWarning("Robots should not quit, but yours did!", false);
-            DriverStation.reportError("Could not instantiate robot " + robotName + "!", false);
-            System.exit(1);
-            return;
-        }
+        T robot = robotSupplier.get();
 
-        if(!isSimulation) {
+        if (RobotBase.isReal()) {
             try {
                 final File file = new File("/tmp/frc_versions/FRC_Lib_Version.ini");
 
@@ -109,28 +99,7 @@ public class Bootstrap {
             }
         }
 
-        boolean errorOnExit = false;
-        try {
-            robot.startCompetition();
-        } catch (Throwable throwable) {
-            Throwable cause = throwable.getCause();
-            if (cause != null) {
-                throwable = cause;
-            }
-            DriverStation.reportError("Unhandled exception: " + throwable.toString(),
-                    throwable.getStackTrace());
-            errorOnExit = true;
-        } finally {
-            // startCompetition never returns unless exception occurs....
-            DriverStation.reportWarning("Robots should not quit, but yours did!", false);
-            if (errorOnExit) {
-                DriverStation.reportError(
-                        "The startCompetition() method (or methods called by it) should have "
-                                + "handled the exception above.", false);
-            } else {
-                DriverStation.reportError("Unexpected return from startCompetition() method.", false);
-            }
-        }
+        robot.startCompetition();
         System.exit(1);
     }
 

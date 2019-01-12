@@ -4,10 +4,7 @@ import org.team2679.TigerEye.lib.log.ColorlessOutputStream;
 import org.team2679.TigerEye.lib.log.PrintSplitStream;
 import org.team2679.TigerEye.lib.log.SplitStream;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 
 /**
  * redirects all of the system.out calls to a file and the standard streams
@@ -16,40 +13,42 @@ import java.io.FileReader;
  */
 public class SysOutFileWriter {
 
+    private static final String LOG_LOCATION = "log";
+    private static final String OUT_FILE_NAME = "out.txt";
+    private static final String ERROR_FILE_NAME = "err.txt";
+
     private static boolean initiated = false;
     private static File logDir;
     private static File outFile;
+    private static File errFile;
     private static FileOutputStream outFileStream;
-    private static SplitStream splitStream;
+    private static FileOutputStream errFileStream;
+    private static SplitStream bothFilesSplitStream;
+    private static SplitStream outSplitStream;
+    private static SplitStream errSplitStream;
 
     /**
      * Initiate the splitter
      */
-    public static void init()
-    {
-        try {
-            if (!initiated) {
-                initiated = true;
-                // get the home directory and create log directory
-                logDir = new File(Bootstrap.getTigerHome(), "log");
-                logDir.mkdirs();
-                // create the new log file
-                outFile = new File(logDir, "output.txt");
-                // delete old log file
-                outFile.delete();
-                if (outFile.exists()) {
-                    outFile.delete();
-                }
-                outFile.createNewFile();
-                outFileStream = new FileOutputStream(outFile);
-                splitStream = new SplitStream(System.out, new ColorlessOutputStream(outFileStream));
+    public static void init() throws IOException {
+        if (!initiated) {
+            initiated = true;
+            // get the home directory and create log directory
+            logDir = new File(Bootstrap.getTigerHome(), LOG_LOCATION);
+            logDir.mkdirs();
+            // create the new log file
+            outFile = new File(logDir, OUT_FILE_NAME);
+            errFile = new File(logDir, ERROR_FILE_NAME);
+            outFileStream = new FileOutputStream(outFile);
+            errFileStream = new FileOutputStream(errFile);
 
-                System.setOut(new PrintSplitStream(splitStream));
-            }
-        }
-        catch (Exception e){
-            System.err.println("System.Out File Writer failed...");
-            e.printStackTrace();
+            bothFilesSplitStream = new SplitStream(new ColorlessOutputStream(errFileStream), new ColorlessOutputStream(outFileStream));
+
+            outSplitStream = new SplitStream(System.out, new ColorlessOutputStream(outFileStream));
+            errSplitStream = new SplitStream(System.err, bothFilesSplitStream);
+
+            System.setOut(new PrintSplitStream(outSplitStream));
+            System.setErr(new PrintStream(errSplitStream));
         }
     }
 

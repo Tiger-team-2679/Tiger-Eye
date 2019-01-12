@@ -21,7 +21,7 @@ public class StateTracker {
     private static DriverStation m_ds = DriverStation.getInstance();
 
     private static ROBOT_STATE currentState = ROBOT_STATE.NONE;
-    private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList<StateListener>();
 
     private static Logger stateTrackerLogger;
 
@@ -54,7 +54,6 @@ public class StateTracker {
                 }
 
                 HAL.observeUserProgramDisabled();
-                // TODO call disabled periodic
             } else if (m_ds.isAutonomous()) {
                 // Call AutonomousInit() if we are now just entering autonomous mode from either a different
                 // mode or from power-on.
@@ -66,7 +65,6 @@ public class StateTracker {
                 }
 
                 HAL.observeUserProgramAutonomous();
-                // TODO call autonomous periodic
             } else if (m_ds.isOperatorControl()) {
                 if (currentState != ROBOT_STATE.TELEOP) {
                     LiveWindow.setEnabled(false);
@@ -75,7 +73,6 @@ public class StateTracker {
                     stateTrackerLogger.debug("StateTracker -> switched to TELEOP");
                 }
                 HAL.observeUserProgramTeleop();
-                // TODO call teleop periodic
             } else {
                 if (currentState != ROBOT_STATE.TEST) {
                     LiveWindow.setEnabled(false);
@@ -84,7 +81,6 @@ public class StateTracker {
                     stateTrackerLogger.debug("StateTracker -> switched to TEST");
                 }
                 HAL.observeUserProgramTest();
-                // TODO call test periodic
             }
             LiveWindow.updateValues();
         }

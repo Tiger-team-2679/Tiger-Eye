@@ -13,9 +13,10 @@ public interface LogHandler {
      * This function will be called every time someone is logging info
      * at one of the loggers
      * @param message the logged message
+     * @param e exception if there is any, null if not
      * @param level the message's level
      * @param formatted the formatted message
      * @param logger the logger used
      */
-    void onLog(String message, LOG_LEVEL level, String formatted, Logger logger);
+    void onLog(String message,Exception e, LOG_LEVEL level, String formatted, Logger logger);
 }

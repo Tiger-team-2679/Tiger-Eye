@@ -17,19 +17,19 @@ public class Logger {
 
     private String name;
     private static CopyOnWriteArrayList<LogHandler> handlers = new CopyOnWriteArrayList<>();
-    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy-hh:mm:ss");
+    private static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy-hh:mm:ss");
 
     /**
      * returns a time formatted like this [dd/MM/yy-hh:mm:ss]
-     * @return
+     * @return the current time in the log format
      */
-    String getTime() {
+    private static String getTime() {
         return dateFormat.format(new Date());
     }
 
     /**
      * Creates a logger given a name
-     * @param name
+     * @param name the name of the logger to be created
      */
     public Logger(String name) {
         this.name = name;
@@ -37,7 +37,7 @@ public class Logger {
 
     /**
      * returns the logger's name
-     * @return
+     * @return the name of the logger
      */
     public String getName(){
         return this.name;
@@ -45,10 +45,20 @@ public class Logger {
 
     /**
      * formats the log message and send it to all the handlers
-     * @param message
-     * @param level
+     * @param message the message to log
+     * @param level the level of the message
      */
     private void log(String message, LOG_LEVEL level){
+        log(message, null, level);
+    }
+
+    /**
+     * formats the log message with an exception and send it to all the handlers
+     * @param message the message to log
+     * @param e the exception to log (if null, no exception will be printed)
+     * @param level the level of the message
+     */
+    private void log(String message, Exception e, LOG_LEVEL level){
         StringBuilder builder = new StringBuilder();
         if(!level.equals(LOG_LEVEL.RAW)) {
             builder.append(getTagString(level));
@@ -59,9 +69,12 @@ public class Logger {
 
         // send out the logged info the Splitter
         System.out.println(fm);
+        if(e != null) {
+            e.printStackTrace();
+        }
 
         for (LogHandler handler : handlers) {
-            handler.onLog(message, level, fm,this);
+            handler.onLog(message,e, level, fm,this);
         }
     }
 
@@ -83,7 +96,7 @@ public class Logger {
 
     /**
      * log a debug message given a name
-     * @param message
+     * @param message the message to log
      */
     public void debug(String message){
         this.log(message, LOG_LEVEL.DEBUG);
@@ -91,7 +104,7 @@ public class Logger {
 
     /**
      * log an info message given a name
-     * @param message
+     * @param message the message to log
      */
     public void info(String message){
         this.log(message, LOG_LEVEL.INFO);
@@ -99,7 +112,7 @@ public class Logger {
 
     /**
      * log a warning message given a name
-     * @param message
+     * @param message the message to log
      */
     public void warning(String message){
         this.log(message, LOG_LEVEL.WARNING );
@@ -107,23 +120,40 @@ public class Logger {
 
     /**
      * log an error message given a name
-     * @param message
+     * @param message the message to log
      */
     public void error(String message){
         this.log(message, LOG_LEVEL.ERROR);
     }
 
     /**
+     * log an exception as an error
+     * @param message the message to log
+     */
+    public void error(String message, Exception e){
+        this.log(message,e, LOG_LEVEL.ERROR);
+    }
+
+    /**
      * log a fatal message given a name
-     * @param message
+     * @param message the message to log
      */
     public void fatal(String message){
         this.log(message, LOG_LEVEL.FATAL);
     }
 
+
+    /**
+     * log an exception as a fatal exception
+     * @param message the message to log
+     */
+    public void fatal(String message,Exception e){
+        this.log(message,e, LOG_LEVEL.FATAL);
+    }
+
     /**
      * register a log handler
-     * @param handler
+     * @param handler the message to log
      */
     public static void registerHandler(LogHandler handler){
         handlers.add(handler);
@@ -131,7 +161,7 @@ public class Logger {
 
     /**
      * remove a log handler
-     * @param handler
+     * @param handler the message to log
      */
     public static void removeHandler(LogHandler handler){
         handlers.remove(handler);

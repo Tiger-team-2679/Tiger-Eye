@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Timer {
 
-    private static ConcurrentHashMap<String, Long> timed = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Long> timed = new ConcurrentHashMap<String, Long>();
 
     /**
      * creates a new timer for a task with the given name
@@ -42,14 +42,6 @@ public class Timer {
         else {
             Bootstrap.getTigerLogger().debug("Timer -> a task with that name doesn't exist");
         }
-    }
-
-    /**
-     * log the timed results in the logger
-     * @param name the name the timer will be logged after
-     */
-    public void logTimer(String name){
-        // TODO implement the logger call
     }
 
     /**

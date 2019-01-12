@@ -3,6 +3,7 @@ package org.team2679.TigerEye.core;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.RobotBase;
 import org.team2679.TigerEye.core.thread.Notifier;
+import org.team2679.TigerEye.lib.exceptions.SetupClassNotFoundException;
 import org.team2679.TigerEye.lib.log.Logger;
 
 /**
@@ -23,27 +24,17 @@ public class Tiger extends RobotBase {
     @Override
     public void startCompetition() {
         try {
+            String setupClassLocation = TigerEyeProperties.getProperty(TigerEyeProperties.SETUP_CLASS_KEY);
             Setup setup = null;
             try {
-                Class cls = java.lang.ClassLoader.getSystemClassLoader().loadClass(TigerEyeProperties.MAIN_CLASS);
-                Object object = cls.newInstance();
-                if(object instanceof Setup){
-                    setup = (Setup) object;
-                }
+                Class cls = java.lang.ClassLoader.getSystemClassLoader().loadClass(setupClassLocation);
+                Object object = cls.getDeclaredConstructor().newInstance();
+                setup = (Setup) object;
+                setup.preinit();
+                HAL.observeUserProgramStarting();
             }
             catch (Exception e){
-                e.printStackTrace();
-                throw new Exception("No setup class was found");
-            }
-
-            if(setup != null) {
-                setup.preinit();
-            }
-
-            HAL.observeUserProgramStarting();
-
-            if(setup != null){
-                setup.init();
+                throw new SetupClassNotFoundException(setupClassLocation);
             }
 
             main_notifier_20ms = new Notifier("main_notifier_20ms", 20);
@@ -54,11 +45,12 @@ public class Tiger extends RobotBase {
             main_notifier_50ms.start();
             main_notifier_100ms.start();
 
+            setup.init();
+
             StateTracker.init();
         }
         catch (Exception e){
-            // TODO inform the crash tracker
-            e.printStackTrace();
+            log().fatal("A fatal exception made the code crash",e);
             shutdownCrash();
         }
     }
