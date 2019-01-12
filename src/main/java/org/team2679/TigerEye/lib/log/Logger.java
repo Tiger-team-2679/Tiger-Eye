@@ -15,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Logger {
 
+    private static final Object printLock = new Object();
     private String name;
     private static CopyOnWriteArrayList<LogHandler> handlers = new CopyOnWriteArrayList<>();
     private static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy-hh:mm:ss");
@@ -68,9 +69,11 @@ public class Logger {
         String fm = builder.toString();
 
         // send out the logged info the Splitter
-        System.out.println(fm);
-        if(e != null) {
-            e.printStackTrace();
+        synchronized(printLock) {
+            System.out.println(fm);
+            if (e != null) {
+                e.printStackTrace();
+            }
         }
 
         for (LogHandler handler : handlers) {
