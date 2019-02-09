@@ -30,8 +30,6 @@ public class Tiger extends RobotBase {
                 Class cls = java.lang.ClassLoader.getSystemClassLoader().loadClass(setupClassLocation);
                 Object object = cls.getDeclaredConstructor().newInstance();
                 setup = (Setup) object;
-                setup.preinit();
-                HAL.observeUserProgramStarting();
             }
             catch (Exception e){
                 throw new SetupClassNotFoundException(setupClassLocation);
@@ -45,6 +43,8 @@ public class Tiger extends RobotBase {
             main_notifier_50ms.start();
             main_notifier_100ms.start();
 
+            setup.preinit();
+            HAL.observeUserProgramStarting();
             setup.init();
 
             StateTracker.init();
