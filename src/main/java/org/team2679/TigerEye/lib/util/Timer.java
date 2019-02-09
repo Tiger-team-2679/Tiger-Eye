@@ -1,6 +1,6 @@
 package org.team2679.TigerEye.lib.util;
 
-import org.team2679.TigerEye.core.Bootstrap;
+import org.team2679.TigerEye.lib.log.Logger;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Timer {
 
     private static ConcurrentHashMap<String, Long> timed = new ConcurrentHashMap<String, Long>();
+    private static Logger timerLogger = new Logger("Timer");
 
     /**
      * creates a new timer for a task with the given name
@@ -24,7 +25,7 @@ public class Timer {
             timed.put(name, getCurrentTimeNano());
         }
         else {
-            Bootstrap.getTigerLogger().debug("Timer -> can't store two tasks with the same name");
+            timerLogger.debug("Timer -> can't store two tasks with the same name");
         }
     }
 
@@ -35,12 +36,12 @@ public class Timer {
      */
     public static void stop(String name){
         if(timed.containsKey(name)) {
-            Bootstrap.getTigerLogger().info(name + " finished in: " +
+            timerLogger.debug(name + " finished in: " +
                     (getCurrentTimeNano() - timed.get(name))/1000000 + "MS");
             timed.remove(name);
         }
         else {
-            Bootstrap.getTigerLogger().debug("Timer -> a task with that name doesn't exist");
+            timerLogger.debug("Timer -> a task with that name doesn't exist");
         }
     }
 

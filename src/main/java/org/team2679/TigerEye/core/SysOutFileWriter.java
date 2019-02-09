@@ -11,7 +11,7 @@ import java.io.*;
  *
  * @author  SlowL0ris
  */
-public class SysOutFileWriter {
+class SysOutFileWriter {
 
     private static final String LOG_LOCATION = "log";
     private static final String OUT_FILE_NAME = "out.txt";

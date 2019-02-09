@@ -3,20 +3,18 @@ package org.team2679.TigerEye.core;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.first.hal.FRCNetComm;
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.WPILibVersion;
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.function.Supplier;
 
-public class Bootstrap {
+class Bootstrap {
 
     // get the logger for the tiger eye
     private static Logger tigerLogger;
@@ -65,7 +63,7 @@ public class Bootstrap {
      */
     @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.AvoidCatchingThrowable",
             "PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
-    private static <T extends RobotBase> void runRobot(Supplier<T> robotSupplier) {
+    private static <T extends Tiger> void runRobot(Supplier<T> robotSupplier) {
         if (!HAL.initialize(500, 0)) {
             throw new IllegalStateException("Failed to initialize. Terminating");
         }
@@ -100,7 +98,6 @@ public class Bootstrap {
         }
 
         robot.startCompetition();
-        System.exit(1);
     }
 
     private static String getSplash(){

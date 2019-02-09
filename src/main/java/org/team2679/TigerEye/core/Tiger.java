@@ -11,9 +11,9 @@ import org.team2679.TigerEye.lib.log.Logger;
  *
  * @author SlowL0ris
  */
-public class Tiger extends RobotBase {
+public class Tiger {
 
-    public static Logger log() {
+    public synchronized static Logger log() {
         return Bootstrap.getTigerLogger();
     }
 
@@ -21,8 +21,7 @@ public class Tiger extends RobotBase {
     private static Notifier main_notifier_50ms;
     private static Notifier main_notifier_20ms;
 
-    @Override
-    public void startCompetition() {
+    void startCompetition() {
         try {
             String setupClassLocation = TigerEyeProperties.getProperty(TigerEyeProperties.SETUP_CLASS_KEY);
             Setup setup = null;
@@ -65,15 +64,15 @@ public class Tiger extends RobotBase {
         System.exit(-1);
     }
 
-    public static Notifier get_main_notifier_20ms() {
+    public static synchronized Notifier get_main_notifier_20ms() {
         return main_notifier_20ms;
     }
 
-    public static Notifier get_main_notifier_50ms() {
+    public static synchronized Notifier get_main_notifier_50ms() {
         return main_notifier_50ms;
     }
 
-    public static Notifier get_main_notifier_100ms() {
+    public static synchronized Notifier get_main_notifier_100ms() {
         return main_notifier_100ms;
     }
 }

@@ -21,7 +21,7 @@ public class StateTracker {
     private static DriverStation m_ds = DriverStation.getInstance();
 
     private static ROBOT_STATE currentState = ROBOT_STATE.NONE;
-    private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList<StateListener>();
+    private static CopyOnWriteArrayList<StateListener> listeners = new CopyOnWriteArrayList();
 
     private static Logger stateTrackerLogger;
 
@@ -30,7 +30,7 @@ public class StateTracker {
      * this is an an inifinite loop so make sure calling
      * it at the end of the setup
      */
-    public static void init(){
+    static void init(){
         stateTrackerLogger = new Logger("StateTracker");
         // This is where the robot is ready
         HAL.observeUserProgramStarting();

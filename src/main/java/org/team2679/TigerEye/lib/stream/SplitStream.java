@@ -1,12 +1,10 @@
 package org.team2679.TigerEye.lib.stream;
 
-import org.team2679.TigerEye.core.SysOutFileWriter;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A stream splitter used by the {@link SysOutFileWriter} in order to split
+ * A java stream splitter
  * the output streams
  *
  * @author  SlowL0ris
