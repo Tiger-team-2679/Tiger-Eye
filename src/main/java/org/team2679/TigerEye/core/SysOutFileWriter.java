@@ -51,13 +51,4 @@ class SysOutFileWriter {
             System.setErr(new PrintStream(errSplitStream));
         }
     }
-
-    /**
-     * get the file reader of the output file
-     * @return the file reader
-     * @throws FileNotFoundException
-     */
-    public FileReader getFileReader() throws FileNotFoundException {
-        return new FileReader(outFile);
-    }
 }
