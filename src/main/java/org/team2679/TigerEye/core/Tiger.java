@@ -2,7 +2,7 @@ package org.team2679.TigerEye.core;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.RobotBase;
-import org.team2679.TigerEye.core.thread.Notifier;
+import org.team2679.TigerEye.lib.thread.Notifier;
 import org.team2679.TigerEye.lib.exceptions.SetupClassNotFoundException;
 import org.team2679.TigerEye.lib.log.Logger;
 

@@ -1,4 +1,4 @@
-package org.team2679.TigerEye.lib.log;
+package org.team2679.TigerEye.lib.stream;
 
 import java.io.IOException;
 import java.io.PrintStream;

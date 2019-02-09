@@ -1,4 +1,4 @@
-package org.team2679.TigerEye.lib.log;
+package org.team2679.TigerEye.lib.stream;
 
 import org.team2679.TigerEye.core.SysOutFileWriter;
 

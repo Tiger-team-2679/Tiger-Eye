@@ -1,4 +1,4 @@
-package org.team2679.TigerEye.core.thread;
+package org.team2679.TigerEye.lib.thread;
 
 import org.team2679.TigerEye.lib.log.Logger;
 import org.team2679.TigerEye.lib.util.Timer;

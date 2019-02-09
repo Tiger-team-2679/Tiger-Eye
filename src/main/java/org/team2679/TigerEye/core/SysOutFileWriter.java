@@ -1,8 +1,8 @@
 package org.team2679.TigerEye.core;
 
-import org.team2679.TigerEye.lib.log.ColorlessOutputStream;
-import org.team2679.TigerEye.lib.log.PrintSplitStream;
-import org.team2679.TigerEye.lib.log.SplitStream;
+import org.team2679.TigerEye.lib.stream.ColorlessOutputStream;
+import org.team2679.TigerEye.lib.stream.PrintSplitStream;
+import org.team2679.TigerEye.lib.stream.SplitStream;
 
 import java.io.*;
 
